@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class PortalHolder : MonoBehaviour
 {
-    public Portal[] Portals;
+    public Portal[] portals;
 
     private void Awake()
     {
-        Portals = GetComponentsInChildren<Portal>();
+        portals = GetComponentsInChildren<Portal>();
     }
 }

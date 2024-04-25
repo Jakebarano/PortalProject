@@ -46,7 +46,6 @@ Shader "Portals/PortalMask"
             };
 
             uniform sampler2D _MainTex;
-            //float4 _MainTex_ST;
 
             v2f vert (appdata v)
             {
