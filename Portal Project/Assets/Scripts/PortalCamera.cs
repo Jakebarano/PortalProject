@@ -19,14 +19,14 @@ public class PortalCamera : MonoBehaviour
     private RenderTexture tempTex0;
     private RenderTexture tempTex1;
     
-    //Cams
+    //Player Cam
     private Camera mainCamera;
 
     private void Awake()
     {
         mainCamera = Camera.main;
-        tempTex0 = new RenderTexture(Screen.width, Screen.height, 16, RenderTextureFormat.ARGB32);
-        tempTex1 = new RenderTexture(Screen.width, Screen.height, 16, RenderTextureFormat.ARGB32);
+        tempTex0 = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+        tempTex1 = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
     }
 
     private void Start()
@@ -63,7 +63,7 @@ public class PortalCamera : MonoBehaviour
         
         if (portals[1].GetComponent<Renderer>().isVisible)
         {
-            PortalCam.targetTexture = tempTex0;
+            PortalCam.targetTexture = tempTex1;
             for (int i = iterations -1; i >= 0; --i)
             {
                 RenderCamera(portals[1], portals[0], i, SRC);
@@ -71,10 +71,10 @@ public class PortalCamera : MonoBehaviour
         }
     }
 
-    private void RenderCamera(Portal inPortal, Portal outPortal, int iterationID, ScriptableRenderContext SRC)
+    private void RenderCamera(Portal portalIn, Portal portalOut, int iterationID, ScriptableRenderContext SRC)
     {
-        Transform inTransform = inPortal.transform;
-        Transform outTransform = outPortal.transform;
+        Transform transformIn = portalIn.transform;
+        Transform transformOut = portalOut.transform;
 
         Transform camTransform = PortalCam.transform;
         camTransform.position = transform.position;
@@ -82,16 +82,16 @@ public class PortalCamera : MonoBehaviour
 
         for (int i = 0; i <= iterationID; ++i)
         {
-            Vector3 relativePos = inTransform.InverseTransformPoint(camTransform.position);
+            Vector3 relativePos = transformIn.InverseTransformPoint(camTransform.position);
             relativePos = Quaternion.Euler(0.0f, 180.0f, 0.0f) * relativePos;
-            camTransform.position = outTransform.TransformPoint(relativePos);
+            camTransform.position = transformOut.TransformPoint(relativePos);
 
-            Quaternion relativeRot = Quaternion.Inverse(inTransform.rotation) * camTransform.rotation;
+            Quaternion relativeRot = Quaternion.Inverse(transformIn.rotation) * camTransform.rotation;
             relativeRot = Quaternion.Euler(0.0f, 180.0f, 0.0f) * relativeRot;
-            camTransform.rotation = outTransform.rotation * relativeRot;
+            camTransform.rotation = transformOut.rotation * relativeRot;
         }
 
-        Plane p = new Plane(-outTransform.forward, outTransform.position);
+        Plane p = new Plane(-transformOut.forward, transformOut.position);
         Vector4 clipPtWS = new Vector4(p.normal.x, p.normal.y, p.normal.z, p.distance);
         Vector4 clipPtCS = Matrix4x4.Transpose(Matrix4x4.Inverse(PortalCam.worldToCameraMatrix)) * clipPtWS;
 
