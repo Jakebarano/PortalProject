@@ -9,9 +9,14 @@ public class PlayerController : MonoBehaviour
     public GameObject pewpew;
     Rigidbody rb;
 
+    //Swaps between 0 and 1
+    int currentPortal = 0;
+
+    PortalHolder portalHolder;
 
     void Start()
     {
+        portalHolder = GameObject.Find("Portals").GetComponent<PortalHolder>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -23,31 +28,51 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.Q))
         {
             transform.Rotate(0, -2, 0);
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.E))
         {
             transform.Rotate(0, 2, 0);
         }
 
+        Vector3 totalVel = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            totalVel += transform.TransformDirection(Vector3.left) * 3;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            totalVel -= transform.TransformDirection(Vector3.left) * 3;
+        }
+
         if (Input.GetKey(KeyCode.W))
         {
-            rb.velocity = transform.forward * 2;
+            totalVel += transform.forward * 3;
         } else
         if (Input.GetKey(KeyCode.S))
         {
-            rb.velocity = transform.forward * -2;
-        } else
-        {
-            rb.velocity = Vector3.zero;
+            totalVel += transform.forward * -3;
         }
+
+        rb.velocity = totalVel;
 
         if (Input.GetKeyDown(KeyCode.Space)) 
         {
             Rigidbody pew = Instantiate(pewpew, transform.position + (transform.forward * 2), transform.rotation).GetComponent<Rigidbody>();
-            pew.velocity = rb.velocity = transform.forward * 3;
+            Bullet b = pew.gameObject.GetComponent<Bullet>();
+            b.setPortal(portalHolder.portals[currentPortal]);
+            pew.velocity = rb.velocity + transform.forward * 3;
+
+            if (currentPortal == 0)
+            {
+                currentPortal = 1;
+            } else
+            {
+                currentPortal = 0;
+            }
         }
     }
 }
