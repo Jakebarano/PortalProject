@@ -23,11 +23,6 @@ Shader "Portals/PortalMask"
         {
             Name "Mask"
             
-            Stencil
-            {
-                Ref 1
-                Pass Replace
-            }
             
             HLSLPROGRAM
                 #pragma vertex vert
