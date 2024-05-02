@@ -23,7 +23,23 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Rigidbody pew = Instantiate(pewpew, transform.position + (transform.forward * 2), transform.rotation)
+                .GetComponent<Rigidbody>();
+            Bullet b = pew.gameObject.GetComponent<Bullet>();
+            b.setPortal(portalHolder.portals[currentPortal]);
+            pew.velocity = rb.velocity + transform.forward * 3;
+
+            if (currentPortal == 0)
+            {
+                currentPortal = 1;
+            }
+            else
+            {
+                currentPortal = 0;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -58,21 +74,5 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.velocity = totalVel;
-
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-            Rigidbody pew = Instantiate(pewpew, transform.position + (transform.forward * 2), transform.rotation).GetComponent<Rigidbody>();
-            Bullet b = pew.gameObject.GetComponent<Bullet>();
-            b.setPortal(portalHolder.portals[currentPortal]);
-            pew.velocity = rb.velocity + transform.forward * 3;
-
-            if (currentPortal == 0)
-            {
-                currentPortal = 1;
-            } else
-            {
-                currentPortal = 0;
-            }
-        }
     }
 }
