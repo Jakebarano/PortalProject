@@ -11,7 +11,6 @@ Shader "Portals/PortalMask"
          Tags
          {
              "RenderType" = "Opaque"
-             "Queue" = "Geometry"
              "RenderPipeline" = "UniversalPipeline"
          }
          

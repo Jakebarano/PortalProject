@@ -82,6 +82,7 @@ public class PortalCamera : MonoBehaviour
 
         for (int i = 0; i <= iterationID; ++i)
         {
+            //Calculate Portal's cam's relative position
             Vector3 relativePos = transformIn.InverseTransformPoint(camTransform.position);
             relativePos = Quaternion.Euler(0.0f, 180.0f, 0.0f) * relativePos;
             camTransform.position = transformOut.TransformPoint(relativePos);
@@ -91,6 +92,7 @@ public class PortalCamera : MonoBehaviour
             camTransform.rotation = transformOut.rotation * relativeRot;
         }
 
+        //Calculate Oblique Projection
         Plane p = new Plane(-transformOut.forward, transformOut.position);
         Vector4 clipPtWS = new Vector4(p.normal.x, p.normal.y, p.normal.z, p.distance);
         Vector4 clipPtCS = Matrix4x4.Transpose(Matrix4x4.Inverse(PortalCam.worldToCameraMatrix)) * clipPtWS;

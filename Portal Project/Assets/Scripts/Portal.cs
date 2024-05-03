@@ -9,7 +9,7 @@ public class Portal : MonoBehaviour
     [SerializeField] public Portal otherPortal;
     
     public bool isPlaced = true;
-    public Renderer Renderer { get; private set; }
+    public Renderer Renderer;
     private void Awake()
     {
         Renderer = GetComponent<Renderer>();
